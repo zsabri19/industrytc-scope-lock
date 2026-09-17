@@ -1,5 +1,13 @@
 import "./style.css"
 import {
+  commercialDefaults,
+  computeCommercial,
+  fmtMoney,
+  fmtNum,
+  parseNum,
+  type CommercialState,
+} from "./commercial"
+import {
   acceptance,
   clarity8c,
   comparisons,
@@ -21,6 +29,7 @@ type Mode = "today" | "guarded"
 let mode: Mode = "guarded"
 let scenarioId = scenarios[0].id
 const openIds = new Set<string>()
+let commercial: CommercialState = { ...commercialDefaults }
 
 const app = document.querySelector<HTMLDivElement>("#app")!
 
@@ -72,10 +81,11 @@ function render() {
         <a href="#routes">Routes</a>
         <a href="#clarity">ClarityOS</a>
         <a href="#risks">Risks</a>
+        <a href="#commercial">Commercial</a>
         <a href="#decide">Decide</a>
       </nav>
       <div class="nav-end">
-        <span class="badge-nc">No commercials</span>
+        <span class="badge-nc">Illustrative commercials</span>
         <button class="menu-btn" type="button" data-action="menu" aria-expanded="false">Menu</button>
       </div>
     </header>
@@ -90,6 +100,7 @@ function render() {
       <a href="#routes">Routes</a>
       <a href="#clarity">ClarityOS</a>
       <a href="#risks">Risks</a>
+      <a href="#commercial">Commercial</a>
       <a href="#decide">Decide</a>
     </div>
 
@@ -459,7 +470,7 @@ function render() {
                 body: `<p><strong>${escapeHtml(l.file)}</strong></p>
                   <p class="muted">${
                     l.n === "07"
-                      ? "Commercial readiness gate only. Contains no price, retainer, or proposal."
+                      ? "Commercial readiness gate. Use the Phase 1 calculator on this page as an illustrative model until evidence confirms volume."
                       : "Required before commercials. Agree this layer before moving down the sequence."
                   }</p>`,
               }),
@@ -468,12 +479,14 @@ function render() {
         </div>
       </section>
 
+      ${commercialSection()}
+
       <section id="decide">
         <div class="section-head">
           <div>
             <div class="eyebrow">Scope-lock acceptance</div>
             <h2>What “approve” means</h2>
-            <p class="lede">Industry TC confirms the following. No commercial commitment is created by this pack.</p>
+            <p class="lede">Industry TC confirms the operating scope first. Commercial figures below are illustrative until baseline evidence is confirmed.</p>
           </div>
         </div>
         <ul class="card accept">
@@ -486,11 +499,11 @@ function render() {
         </ul>
 
         <div class="cta">
-          <h2>Approve the journey before the quote</h2>
-          <p>This awareness site is intentionally non-commercial. Approve the three-month Scope Lock so Pakistan registration response is built once, measured once, and expanded from evidence.</p>
+          <h2>Approve the journey — then lock the numbers</h2>
+          <p>Agree the three-month Scope Lock path. Use the commercial calculator as a working model; finalize price after volume and duration evidence is confirmed.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#pace">See the 3-month timeline</a>
-            <a class="btn btn-ghost" href="#scenarios">Revisit a use case</a>
+            <a class="btn btn-primary" href="#commercial">Review Phase 1 commercials</a>
+            <a class="btn btn-ghost" href="#pace">See the 3-month timeline</a>
           </div>
         </div>
       </section>
@@ -502,6 +515,152 @@ function render() {
   `
 
   bind()
+}
+
+function commercialSection() {
+  const c = commercial
+  const derived = c.clientRatePerMin == null
+  return `
+      <section id="commercial">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Phase 1 commercials</div>
+            <h2>Usage + advisory retainer model</h2>
+            <p class="lede">Editable working model for the Pakistan pilot. Change units, rates, fees, or margin — totals update live. Not a locked quote until evidence confirms volume and talk time.</p>
+          </div>
+        </div>
+
+        <div class="guide commercial-guide" role="note">
+          <strong>Illustrative</strong>
+          <span>Defaults follow prior Seed R&amp;D (~2,700 min/mo · ~90 sec filter talk · $0.35/min cost basis). Adjust freely in the fields below.</span>
+        </div>
+
+        <div class="commercial-layout">
+          <form class="card commercial-inputs" id="commercial-form" autocomplete="off">
+            <h3>Model inputs</h3>
+            <p class="field-note">All fields are editable. Leave “Client rate / min” blank to price calling from cost + margin.</p>
+
+            <div class="input-grid">
+              <label class="field">
+                <span>Billable minutes / month</span>
+                <input type="number" min="0" step="50" name="minutesPerMonth" value="${c.minutesPerMonth}" />
+                <small>Unit: minutes</small>
+              </label>
+              <label class="field">
+                <span>Internal cost / min (USD)</span>
+                <input type="number" min="0" step="0.01" name="costPerMin" value="${c.costPerMin}" />
+                <small>Cost basis</small>
+              </label>
+              <label class="field">
+                <span>Calling margin %</span>
+                <input type="number" min="0" max="95" step="1" name="callingMarginPct" value="${c.callingMarginPct}" ${derived ? "" : "disabled"} />
+                <small>Used when client rate is blank</small>
+              </label>
+              <label class="field">
+                <span>Client rate / min (USD)</span>
+                <input type="number" min="0" step="0.01" name="clientRatePerMin" value="${c.clientRatePerMin ?? ""}" placeholder="Auto from margin" />
+                <small>Override · blank = auto</small>
+              </label>
+              <label class="field">
+                <span>Advisory hours / month</span>
+                <input type="number" min="0" step="0.5" name="advisoryHours" value="${c.advisoryHours}" />
+                <small>Unit: hours</small>
+              </label>
+              <label class="field">
+                <span>Advisory rate / hour (USD)</span>
+                <input type="number" min="0" step="5" name="advisoryRate" value="${c.advisoryRate}" />
+                <small>Service fee</small>
+              </label>
+              <label class="field">
+                <span>Setup fee one-time (USD)</span>
+                <input type="number" min="0" step="50" name="setupFee" value="${c.setupFee}" />
+                <small>0 = waive</small>
+              </label>
+              <label class="field">
+                <span>Setup amortize (months)</span>
+                <input type="number" min="1" max="12" step="1" name="setupAmortMonths" value="${c.setupAmortMonths}" />
+                <small>For monthly view only</small>
+              </label>
+              <label class="field">
+                <span>Overage rate / min (USD)</span>
+                <input type="number" min="0" step="0.01" name="overagePerMin" value="${c.overagePerMin}" />
+                <small>If minutes exceed plan</small>
+              </label>
+            </div>
+
+            <div class="commercial-actions">
+              <button type="button" class="btn btn-reset" data-action="reset-commercial">Reset to Seed defaults</button>
+            </div>
+          </form>
+
+          <div id="commercial-results">
+            ${commercialResultsHtml()}
+          </div>
+        </div>
+      </section>`
+}
+
+function commercialResultsHtml() {
+  const b = computeCommercial(commercial, timeline.durationMonths)
+  return `
+            <div class="card commercial-results">
+              <h3>Phase 1 segments</h3>
+              <div class="comm-table-wrap">
+                <table class="comm-table">
+                  <thead>
+                    <tr>
+                      <th>Segment</th>
+                      <th>Units</th>
+                      <th>Rate</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${b.lines
+                      .map(
+                        (line) => `
+                      <tr>
+                        <td>
+                          <strong>${escapeHtml(line.label)}</strong>
+                          ${line.note ? `<div class="line-note">${escapeHtml(line.note)}</div>` : ""}
+                        </td>
+                        <td>${fmtNum(line.units, line.id === "advisory" ? 1 : 0)} <span class="unit">${escapeHtml(line.unitsLabel)}</span></td>
+                        <td>${fmtMoney(line.rate)} <span class="unit">${escapeHtml(line.rateLabel)}</span></td>
+                        <td class="amount">${fmtMoney(line.amount)}</td>
+                      </tr>`,
+                      )
+                      .join("")}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="comm-totals">
+                <div class="total-row">
+                  <span>Monthly calling + advisory</span>
+                  <strong>${fmtMoney(b.monthlySubtotal)}</strong>
+                </div>
+                <div class="total-row">
+                  <span>Monthly view (incl. setup amort.)</span>
+                  <strong>${fmtMoney(b.monthlyTotal)}</strong>
+                </div>
+                <div class="total-row phase">
+                  <span>Phase 1 total (${b.phaseMonths} months)</span>
+                  <strong>${fmtMoney(b.phaseTotal)}</strong>
+                </div>
+                <p class="phase-breakdown">
+                  ${fmtMoney(b.phaseCalling)} calling
+                  + ${fmtMoney(b.phaseAdvisory)} advisory
+                  + ${fmtMoney(b.phaseSetup)} setup (one-time)
+                </p>
+              </div>
+
+              <div class="comm-meta">
+                <div><span>Effective client rate</span><strong>${fmtMoney(b.effectiveClientRate)} / min</strong></div>
+                <div><span>Calling cost basis</span><strong>${fmtMoney(b.callingCost)} / mo</strong></div>
+                <div><span>Calling margin</span><strong>~${fmtNum(b.callingMarginPctActual, 0)}%</strong></div>
+                <div><span>Overage reference</span><strong>${fmtMoney(commercial.overagePerMin)} / min</strong></div>
+              </div>
+            </div>`
 }
 
 function journeyCard(step: JourneyStep, index: number) {
@@ -572,7 +731,46 @@ function bind() {
     })
   })
 
+  bindCommercial()
   observeActiveNav()
+}
+
+function bindCommercial() {
+  const form = app.querySelector<HTMLFormElement>("#commercial-form")
+  if (!form) return
+
+  const syncFromForm = () => {
+    const fd = new FormData(form)
+    const rateRaw = String(fd.get("clientRatePerMin") ?? "").trim()
+    commercial = {
+      minutesPerMonth: parseNum(String(fd.get("minutesPerMonth")), commercial.minutesPerMonth),
+      costPerMin: parseNum(String(fd.get("costPerMin")), commercial.costPerMin),
+      callingMarginPct: parseNum(String(fd.get("callingMarginPct")), commercial.callingMarginPct),
+      clientRatePerMin: rateRaw === "" ? null : parseNum(rateRaw, 0),
+      advisoryHours: parseNum(String(fd.get("advisoryHours")), commercial.advisoryHours),
+      advisoryRate: parseNum(String(fd.get("advisoryRate")), commercial.advisoryRate),
+      setupFee: parseNum(String(fd.get("setupFee")), commercial.setupFee),
+      setupAmortMonths: parseNum(String(fd.get("setupAmortMonths")), commercial.setupAmortMonths),
+      overagePerMin: parseNum(String(fd.get("overagePerMin")), commercial.overagePerMin),
+    }
+
+    const marginInput = form.querySelector<HTMLInputElement>('input[name="callingMarginPct"]')
+    if (marginInput) marginInput.disabled = commercial.clientRatePerMin != null
+
+    const results = app.querySelector("#commercial-results")
+    if (results) results.innerHTML = commercialResultsHtml()
+  }
+
+  form.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", syncFromForm)
+    input.addEventListener("change", syncFromForm)
+  })
+
+  app.querySelector<HTMLButtonElement>('[data-action="reset-commercial"]')?.addEventListener("click", () => {
+    commercial = { ...commercialDefaults }
+    render()
+    document.querySelector("#commercial")?.scrollIntoView({ behavior: "smooth", block: "start" })
+  })
 }
 
 function observeActiveNav() {
