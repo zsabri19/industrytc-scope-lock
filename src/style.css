@@ -78,24 +78,33 @@ select {
   font-weight: 800;
   letter-spacing: -0.02em;
   white-space: nowrap;
+  min-width: 0;
 }
 
-.brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--teal);
-  color: white;
-  display: grid;
-  place-items: center;
-  font-size: 0.72rem;
-  font-weight: 800;
+.brand-logo {
+  display: block;
+  height: 34px;
+  width: auto;
+  max-width: min(200px, 42vw);
+  object-fit: contain;
 }
 
-.brand span {
+.brand-tag {
   color: var(--muted);
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-weight: 650;
+  font-size: 0.82rem;
+  padding-left: 0.65rem;
+  border-left: 1px solid var(--line);
+  line-height: 1.1;
+}
+
+@media (max-width: 520px) {
+  .brand-tag {
+    display: none;
+  }
+  .brand-logo {
+    height: 30px;
+  }
 }
 
 .nav-links {

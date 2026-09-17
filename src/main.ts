@@ -67,10 +67,10 @@ function render() {
 
   app.innerHTML = `
     <header class="nav">
-      <div class="brand">
-        <div class="brand-mark">ITC</div>
-        <div>Industry TC <span>· Scope Lock</span></div>
-      </div>
+      <a class="brand" href="#problem" aria-label="Industry TC Scope Lock">
+        <img class="brand-logo" src="${import.meta.env.BASE_URL}industry-tc-logo.png" alt="Industry TC" width="168" height="37" />
+        <span class="brand-tag">Scope Lock</span>
+      </a>
       <nav class="nav-links" aria-label="Sections">
         <a href="#problem">Problem</a>
         <a href="#pace">Timeline</a>
