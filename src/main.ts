@@ -82,7 +82,7 @@ function render() {
 
     <div class="mobile-nav" id="mobile-nav" hidden>
       <a href="#problem">Problem</a>
-      <a href="#pace">Pace</a>
+      <a href="#pace">Timeline</a>
       <a href="#journey">Journey</a>
       <a href="#scenarios">Scenarios</a>
       <a href="#tradeoffs">Trade-offs</a>
