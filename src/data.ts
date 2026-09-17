@@ -8,107 +8,103 @@ export const meta = {
     "Approve the scope, sequencing, guardrails, responsibilities, and evidence gates before any commercial proposal is issued.",
   problem: "Registration is happening, but the call is not happening quickly enough.",
   paceLine:
-    "We are not pausing AI. We are pausing chaos — so the first sprint becomes the asset you can copy, not the mess you have to rebuild.",
+    "Lock the registration-to-call journey once for Pakistan — then build, observe, and decide with evidence. That is the shorter path to a reusable operating model.",
 }
 
-/** Best-case 3 months / worst-case 6 months — Human OS first, then System OS. */
+/** Client-facing 3-month Scope Lock delivery plan. */
 export const timeline = {
-  bestMonths: 3,
-  worstMonths: 6,
+  durationMonths: 3,
   thesis:
-    "Three months is enough when the Human OS is locked first. Six months is what happens when evidence, owners, or scope stay open while the agent is already live.",
-  forThreeMonths: [
-    "Scope lock approved in week 1–2 (Pakistan, Urdu/English, voice-first, dispositions, handoff).",
-    "Named owners and approved knowledge base before build.",
-    "Baseline exports delivered (volume, callback delay, connect rates) — not guessed.",
-    "No new countries, WhatsApp, or cold outbound during Phase 1.",
-    "Observe-first window respected: no mid-pilot script rewrites except safety pauses.",
-    "Commercials do not block the pilot build once scope and baseline are clear.",
-  ],
-  drivesToSixMonths: [
-    "Evidence gaps stay open while leadership asks for a price or a guarantee.",
-    "Owners are unnamed; change requests arrive verbally every week.",
-    "Scope expands mid-build (languages, channels, verification automation).",
-    "Observation is skipped or treated as failure before the window closes.",
-    "The team waits for a full commercial package before locking the journey.",
-    "Unguarded launch creates complaints — then a rebuild costs another quarter.",
-  ],
-  months: [
+    "This Scope Lock proposition is a structured three-month Pakistan pilot: agree the journey, build the governed response layer, then measure and decide before expanding.",
+  objective:
+    "Close the registration-to-call gap with a transparent Urdu/English voice agent, clear dispositions, complete human handoffs, and a measurable baseline — without commercial packaging in this phase.",
+  phases: [
     {
       id: "m1",
       band: "Month 1",
-      title: "Stabilize the Human OS",
+      title: "Agree and freeze Phase 1",
+      weeks: "Weeks 1–4",
       items: [
-        "Scope-lock approval",
-        "Evidence baseline + owners named",
-        "Knowledge base + disclosure approved",
-        "Workflow / disposition / handoff freeze",
+        "Confirm Pakistan · Urdu + English · voice-first · new/recent leads only",
+        "Approve in-scope / out-of-scope lists and change-control rules",
+        "Name owners (business, data, knowledge, verification, go/no-go)",
+        "Deliver baseline extracts: volume, callback delay, connect rates",
+        "Freeze dispositions, handoff packet, AI disclosure, and approved FAQs",
       ],
     },
     {
       id: "m2",
       band: "Month 2",
-      title: "Install the System OS (once)",
+      title: "Build and soft-launch",
+      weeks: "Weeks 5–8",
       items: [
-        "Pilot build inside locked journey",
-        "Safety / opt-out / handoff tests",
-        "Soft launch Pakistan voice route",
-        "Daily operating rhythm live",
+        "Build the AI filter call inside the locked journey only",
+        "Test opt-out, callback, unknown-question, and handoff completeness",
+        "Connect lead trigger, timestamps, and outcome logging",
+        "Soft-launch Pakistan voice response on the approved population",
+        "Run the daily/weekly operating rhythm with CS and delivery",
       ],
     },
     {
       id: "m3",
       band: "Month 3",
-      title: "Calibrate, then decide",
+      title: "Observe, review, and decide",
+      weeks: "Weeks 9–12",
       items: [
-        "Controlled observation window",
-        "Disposition and handoff quality review",
-        "Baseline comparison pack",
-        "Scale / revise recommendation — then commercials with evidence",
+        "Hold a controlled observation window (no casual script rewrites)",
+        "Review disposition quality, handoff quality, and safety events",
+        "Compare results to the Month 1 baseline",
+        "Issue scale / revise recommendation for Pakistan",
+        "Only then open commercial readiness with verified assumptions",
       ],
     },
-    {
-      id: "m46",
-      band: "Months 4–6",
-      title: "Only if the path slips",
-      items: [
-        "Close remaining evidence gaps",
-        "Correct after safety or routing failures",
-        "Re-freeze scope after creep",
-        "Earn expansion — do not invent it",
-      ],
-    },
+  ],
+  keepsOnTrack: [
+    "Scope lock signed early — Pakistan, languages, channel, exclusions.",
+    "Owners named before build starts.",
+    "Baseline data provided as exports, not estimates.",
+    "No WhatsApp, cold outbound, or new countries during these 12 weeks.",
+    "Observation window respected; pause only for safety or material routing failures.",
+    "Pricing and packages stay out of Phase 1 until evidence is reviewed.",
+  ],
+  extendsTimeline: [
+    "Baseline or consent data remains unavailable.",
+    "Owners stay unnamed; scope changes arrive verbally every week.",
+    "Extra languages, channels, or countries are added mid-build.",
+    "Observation is skipped or judged before the window closes.",
+    "Build is held until a full commercial proposal exists.",
+    "An unguarded launch creates complaints and forces a rebuild.",
   ],
 }
 
 export const paceCompare = {
-  headline: "What looks like a slowdown is the shorter path",
+  headline: "Why locking scope first is not a slowdown",
   falseFast: {
-    title: "“Ship AI this month”",
-    feel: "Looks decisive",
+    title: "Launch the agent immediately",
+    feel: "Looks faster on day one",
     outcome: [
-      "Agent goes live without a frozen journey",
-      "Warm leads get fluent but wrong answers",
-      "Humans re-ask the full conversation",
-      "Leadership sees call volume — not qualified sellers",
-      "Next country copies a broken process",
-      "You pay twice: once to launch, again to repair trust",
+      "Calls start before the journey and knowledge boundary are frozen",
+      "Warm leads hear fluent but unsupported answers",
+      "CS re-asks the full conversation after handoff",
+      "Reporting shows minutes — not qualified sellers or next-step completion",
+      "The next country inherits the same leak",
+      "Time is spent twice: launch, then repair",
     ],
   },
   trueFast: {
-    title: "“Lock Human OS, then sprint”",
-    feel: "Looks careful — finishes faster",
+    title: "Run the 3-month Scope Lock path",
+    feel: "Looks measured — finishes cleaner",
     outcome: [
-      "Week 1–2: one problem, one geography, one language pair",
-      "Build once against a frozen disposition and handoff",
-      "Observation produces evidence, not arguments",
-      "Pakistan becomes the template — copy-paste is earned",
-      "Commercials price a verified operating scope",
-      "You pay once for an asset that compounds",
+      "Month 1 freezes the registration-to-call journey for Pakistan",
+      "Month 2 builds one governed voice response — once",
+      "Month 3 measures outcomes against a real baseline",
+      "Expansion is a decision from evidence, not pressure",
+      "Commercials can price a verified operating scope",
+      "Time is spent once on an asset you can reuse",
     ],
   },
   executiveLine:
-    "Speed without a stable Human OS is not speed. It is a longer calendar with more apologies. Scope Lock shortens the real timeline by refusing to rebuild chaos in every country.",
+    "An unguarded launch can look quick and still cost a longer calendar. A three-month Scope Lock closes the first leak properly — then Industry TC expands from a working Pakistan model, not from a rebuild.",
 }
 
 export type JourneyStep = {

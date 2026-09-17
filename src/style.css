@@ -928,6 +928,15 @@ details.expand:focus-within {
   color: var(--ink);
 }
 
+.pace-objective {
+  margin: 0.85rem 0 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  font-family: var(--font);
+  font-style: normal;
+  line-height: 1.5;
+}
+
 .pace-bands {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1191,7 +1200,7 @@ details.expand:focus-within {
   .c-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  .timeline-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .timeline-grid.timeline-three {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

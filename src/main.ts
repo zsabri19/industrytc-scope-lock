@@ -64,7 +64,7 @@ function render() {
       </div>
       <nav class="nav-links" aria-label="Sections">
         <a href="#problem">Problem</a>
-        <a href="#pace">Pace</a>
+        <a href="#pace">Timeline</a>
         <a href="#journey">Journey</a>
         <a href="#scenarios">Scenarios</a>
         <a href="#tradeoffs">Trade-offs</a>
@@ -109,9 +109,8 @@ function render() {
             <span class="chip teal">Pakistan pilot</span>
             <span class="chip teal">Urdu + English</span>
             <span class="chip teal">Voice-first</span>
-            <span class="chip teal">Best case 3 months</span>
-            <span class="chip">Worst case 6 months</span>
-            <span class="chip">Human-accountable</span>
+            <span class="chip teal">3-month Scope Lock</span>
+            <span class="chip">Human verification retained</span>
           </div>
         </article>
         <aside class="decision">
@@ -124,35 +123,36 @@ function render() {
       <section id="pace">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Timeline · Human OS first</div>
-            <h2>Can this be done in 3 months?</h2>
+            <div class="eyebrow">Scope Lock timeline</div>
+            <h2>Three-month Phase 1 plan</h2>
             <p class="lede">${escapeHtml(timeline.thesis)}</p>
           </div>
         </div>
 
         <div class="pace-banner card">
           <p class="pace-line serif">“${escapeHtml(meta.paceLine)}”</p>
+          <p class="pace-objective">${escapeHtml(timeline.objective)}</p>
         </div>
 
         <div class="pace-bands">
           <article class="card pace-band ok-border">
-            <div class="pace-kicker">Best case</div>
-            <h3>${timeline.bestMonths} months</h3>
-            <p>Human OS locked early. One geography. One language pair. Build once. Observe. Decide.</p>
+            <div class="pace-kicker">Proposed duration</div>
+            <h3>${timeline.durationMonths} months</h3>
+            <p>Pakistan · Urdu + English · voice-first registration response and qualification.</p>
           </article>
-          <article class="card pace-band warn-border">
-            <div class="pace-kicker">Worst case</div>
-            <h3>${timeline.worstMonths} months</h3>
-            <p>Evidence, owners, or scope stay open — or an unguarded launch forces a rebuild.</p>
+          <article class="card pace-band">
+            <div class="pace-kicker">Phase 1 outcome</div>
+            <h3>Decide with evidence</h3>
+            <p>Measured results vs baseline — then scale, revise, or open commercials.</p>
           </article>
         </div>
 
-        <div class="timeline-grid">
-          ${timeline.months
+        <div class="timeline-grid timeline-three">
+          ${timeline.phases
             .map(
               (m) => `
-            <article class="card timeline-card ${m.id === "m46" ? "slip" : ""}">
-              <div class="timeline-band">${escapeHtml(m.band)}</div>
+            <article class="card timeline-card">
+              <div class="timeline-band">${escapeHtml(m.band)} · ${escapeHtml(m.weeks)}</div>
               <h3>${escapeHtml(m.title)}</h3>
               <ul>${m.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
             </article>`,
@@ -162,24 +162,24 @@ function render() {
 
         <div class="split pace-conditions">
           ${detailsCard({
-            id: "pace-3mo",
+            id: "pace-on-track",
             className: "condition-card",
-            summary: `<div class="topic">What must be true for 3 months</div><div class="tap-hint">Click to open checklist</div>`,
-            body: `<ul class="plain-list">${timeline.forThreeMonths.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`,
+            summary: `<div class="topic">What keeps the 3-month plan on track</div><div class="tap-hint">Click to open</div>`,
+            body: `<ul class="plain-list">${timeline.keepsOnTrack.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`,
           })}
           ${detailsCard({
-            id: "pace-6mo",
+            id: "pace-extends",
             className: "condition-card",
-            summary: `<div class="topic">What pushes the path to 6 months</div><div class="tap-hint">Click to open risks</div>`,
-            body: `<ul class="plain-list">${timeline.drivesToSixMonths.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`,
+            summary: `<div class="topic">What extends the timeline beyond 3 months</div><div class="tap-hint">Click to open</div>`,
+            body: `<ul class="plain-list">${timeline.extendsTimeline.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`,
           })}
         </div>
 
         <div class="section-head pace-exec-head">
           <div>
-            <div class="eyebrow">For the executive team</div>
+            <div class="eyebrow">Executive view</div>
             <h2>${escapeHtml(paceCompare.headline)}</h2>
-            <p class="lede">A pause on unguarded AI is not a pause on progress. It is how you get a quicker sprint than competitors who launch noise.</p>
+            <p class="lede">Locking the journey before the agent scales is how Industry TC avoids rebuilding the same leak in every country.</p>
           </div>
         </div>
 
@@ -383,8 +383,8 @@ function render() {
         <div class="section-head">
           <div>
             <div class="eyebrow">ClarityOS · 8C</div>
-            <h2>Human OS before System OS</h2>
-            <p class="lede">Click each C for the operating lens behind this submission.</p>
+            <h2>Operating lens for Phase 1</h2>
+            <p class="lede">Click each C for the governance sequence behind this Scope Lock.</p>
           </div>
         </div>
         <div class="c-grid">
@@ -487,9 +487,9 @@ function render() {
 
         <div class="cta">
           <h2>Approve the journey before the quote</h2>
-          <p>This awareness site is intentionally non-commercial. Lock the Human OS so a 3-month sprint becomes an asset — not a 6-month rebuild. Unguarded speed is the longer calendar.</p>
+          <p>This awareness site is intentionally non-commercial. Approve the three-month Scope Lock so Pakistan registration response is built once, measured once, and expanded from evidence.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#pace">See the 3 / 6 month path</a>
+            <a class="btn btn-primary" href="#pace">See the 3-month timeline</a>
             <a class="btn btn-ghost" href="#scenarios">Revisit a use case</a>
           </div>
         </div>
