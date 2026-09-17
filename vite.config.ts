@@ -1,6 +1,6 @@
 import { defineConfig } from "vite"
 
-// GitHub Pages serves at https://<user>.github.io/<repo>/
+// Default `/` for Vercel / local. GitHub Pages workflow sets VITE_BASE=/industrytc-scope-lock/
 export default defineConfig({
-  base: process.env.VITE_BASE ?? "/industrytc-scope-lock/",
+  base: process.env.VITE_BASE ?? "/",
 })
