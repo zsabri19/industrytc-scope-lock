@@ -302,25 +302,27 @@ export const scenarios: Scenario[] = [
   {
     id: "commercial-pressure",
     title: "Commercial question on first call",
-    persona: "Lead asks about plans, pricing, or guarantees on the first touch.",
+    persona: "Lead asks about plans, pricing, or how much it costs on the first touch.",
     without: {
       title: "If AI improvises commercials",
       points: [
-        "Invented plan features or discounts.",
+        "Invented plan features, discounts, or tiers.",
         "Order / RFQ / revenue promises.",
-        "Hidden terms or premature paywall pressure.",
+        "Premature paywall pressure or unsupported upgrade claims.",
       ],
     },
     withGuard: {
       title: "If commercial boundary is frozen",
       points: [
-        "Only approved factual platform info — or escalate.",
-        "No subscription sales in Phase 1 AI scope.",
-        "Commercials wait for readiness gate + verified evidence.",
+        "Approved factual answer only: Industry TC offers a free starting model — you can list and showcase up to 25 products from day one at no cost.",
+        "No negotiation, no invented packages, no order or RFQ guarantees on the first call.",
+        "Any further commercial detail (paid tiers, upgrades, special terms) routes to an authorized human owner.",
       ],
     },
-    betterBecause: "Scope clarity protects both parties from unverifiable claims.",
-    worseIfSkipped: "You price a promise — not a verified operating scope.",
+    betterBecause:
+      "The lead hears one clear, approved platform fact — freemium access to market up to 25 products free from day one — without the agent selling or improvising.",
+    worseIfSkipped:
+      "The first call becomes a sales pitch or a false promise, and trust is lost before onboarding even starts.",
   },
 ]
 
