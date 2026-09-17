@@ -7,6 +7,108 @@ export const meta = {
   decision:
     "Approve the scope, sequencing, guardrails, responsibilities, and evidence gates before any commercial proposal is issued.",
   problem: "Registration is happening, but the call is not happening quickly enough.",
+  paceLine:
+    "We are not pausing AI. We are pausing chaos — so the first sprint becomes the asset you can copy, not the mess you have to rebuild.",
+}
+
+/** Best-case 3 months / worst-case 6 months — Human OS first, then System OS. */
+export const timeline = {
+  bestMonths: 3,
+  worstMonths: 6,
+  thesis:
+    "Three months is enough when the Human OS is locked first. Six months is what happens when evidence, owners, or scope stay open while the agent is already live.",
+  forThreeMonths: [
+    "Scope lock approved in week 1–2 (Pakistan, Urdu/English, voice-first, dispositions, handoff).",
+    "Named owners and approved knowledge base before build.",
+    "Baseline exports delivered (volume, callback delay, connect rates) — not guessed.",
+    "No new countries, WhatsApp, or cold outbound during Phase 1.",
+    "Observe-first window respected: no mid-pilot script rewrites except safety pauses.",
+    "Commercials do not block the pilot build once scope and baseline are clear.",
+  ],
+  drivesToSixMonths: [
+    "Evidence gaps stay open while leadership asks for a price or a guarantee.",
+    "Owners are unnamed; change requests arrive verbally every week.",
+    "Scope expands mid-build (languages, channels, verification automation).",
+    "Observation is skipped or treated as failure before the window closes.",
+    "The team waits for a full commercial package before locking the journey.",
+    "Unguarded launch creates complaints — then a rebuild costs another quarter.",
+  ],
+  months: [
+    {
+      id: "m1",
+      band: "Month 1",
+      title: "Stabilize the Human OS",
+      items: [
+        "Scope-lock approval",
+        "Evidence baseline + owners named",
+        "Knowledge base + disclosure approved",
+        "Workflow / disposition / handoff freeze",
+      ],
+    },
+    {
+      id: "m2",
+      band: "Month 2",
+      title: "Install the System OS (once)",
+      items: [
+        "Pilot build inside locked journey",
+        "Safety / opt-out / handoff tests",
+        "Soft launch Pakistan voice route",
+        "Daily operating rhythm live",
+      ],
+    },
+    {
+      id: "m3",
+      band: "Month 3",
+      title: "Calibrate, then decide",
+      items: [
+        "Controlled observation window",
+        "Disposition and handoff quality review",
+        "Baseline comparison pack",
+        "Scale / revise recommendation — then commercials with evidence",
+      ],
+    },
+    {
+      id: "m46",
+      band: "Months 4–6",
+      title: "Only if the path slips",
+      items: [
+        "Close remaining evidence gaps",
+        "Correct after safety or routing failures",
+        "Re-freeze scope after creep",
+        "Earn expansion — do not invent it",
+      ],
+    },
+  ],
+}
+
+export const paceCompare = {
+  headline: "What looks like a slowdown is the shorter path",
+  falseFast: {
+    title: "“Ship AI this month”",
+    feel: "Looks decisive",
+    outcome: [
+      "Agent goes live without a frozen journey",
+      "Warm leads get fluent but wrong answers",
+      "Humans re-ask the full conversation",
+      "Leadership sees call volume — not qualified sellers",
+      "Next country copies a broken process",
+      "You pay twice: once to launch, again to repair trust",
+    ],
+  },
+  trueFast: {
+    title: "“Lock Human OS, then sprint”",
+    feel: "Looks careful — finishes faster",
+    outcome: [
+      "Week 1–2: one problem, one geography, one language pair",
+      "Build once against a frozen disposition and handoff",
+      "Observation produces evidence, not arguments",
+      "Pakistan becomes the template — copy-paste is earned",
+      "Commercials price a verified operating scope",
+      "You pay once for an asset that compounds",
+    ],
+  },
+  executiveLine:
+    "Speed without a stable Human OS is not speed. It is a longer calendar with more apologies. Scope Lock shortens the real timeline by refusing to rebuild chaos in every country.",
 }
 
 export type JourneyStep = {

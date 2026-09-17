@@ -7,10 +7,12 @@ import {
   journey,
   layers,
   meta,
+  paceCompare,
   risks,
   scenarios,
   scopeIn,
   scopeOut,
+  timeline,
   type JourneyStep,
 } from "./data"
 
@@ -62,6 +64,7 @@ function render() {
       </div>
       <nav class="nav-links" aria-label="Sections">
         <a href="#problem">Problem</a>
+        <a href="#pace">Pace</a>
         <a href="#journey">Journey</a>
         <a href="#scenarios">Scenarios</a>
         <a href="#tradeoffs">Trade-offs</a>
@@ -79,6 +82,7 @@ function render() {
 
     <div class="mobile-nav" id="mobile-nav" hidden>
       <a href="#problem">Problem</a>
+      <a href="#pace">Pace</a>
       <a href="#journey">Journey</a>
       <a href="#scenarios">Scenarios</a>
       <a href="#tradeoffs">Trade-offs</a>
@@ -105,7 +109,8 @@ function render() {
             <span class="chip teal">Pakistan pilot</span>
             <span class="chip teal">Urdu + English</span>
             <span class="chip teal">Voice-first</span>
-            <span class="chip">Seller-first qualification</span>
+            <span class="chip teal">Best case 3 months</span>
+            <span class="chip">Worst case 6 months</span>
             <span class="chip">Human-accountable</span>
           </div>
         </article>
@@ -114,6 +119,84 @@ function render() {
           <p>${escapeHtml(meta.decision)}</p>
           <div class="note">${escapeHtml(meta.commercial)}</div>
         </aside>
+      </section>
+
+      <section id="pace">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Timeline · Human OS first</div>
+            <h2>Can this be done in 3 months?</h2>
+            <p class="lede">${escapeHtml(timeline.thesis)}</p>
+          </div>
+        </div>
+
+        <div class="pace-banner card">
+          <p class="pace-line serif">“${escapeHtml(meta.paceLine)}”</p>
+        </div>
+
+        <div class="pace-bands">
+          <article class="card pace-band ok-border">
+            <div class="pace-kicker">Best case</div>
+            <h3>${timeline.bestMonths} months</h3>
+            <p>Human OS locked early. One geography. One language pair. Build once. Observe. Decide.</p>
+          </article>
+          <article class="card pace-band warn-border">
+            <div class="pace-kicker">Worst case</div>
+            <h3>${timeline.worstMonths} months</h3>
+            <p>Evidence, owners, or scope stay open — or an unguarded launch forces a rebuild.</p>
+          </article>
+        </div>
+
+        <div class="timeline-grid">
+          ${timeline.months
+            .map(
+              (m) => `
+            <article class="card timeline-card ${m.id === "m46" ? "slip" : ""}">
+              <div class="timeline-band">${escapeHtml(m.band)}</div>
+              <h3>${escapeHtml(m.title)}</h3>
+              <ul>${m.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+            </article>`,
+            )
+            .join("")}
+        </div>
+
+        <div class="split pace-conditions">
+          ${detailsCard({
+            id: "pace-3mo",
+            className: "condition-card",
+            summary: `<div class="topic">What must be true for 3 months</div><div class="tap-hint">Click to open checklist</div>`,
+            body: `<ul class="plain-list">${timeline.forThreeMonths.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`,
+          })}
+          ${detailsCard({
+            id: "pace-6mo",
+            className: "condition-card",
+            summary: `<div class="topic">What pushes the path to 6 months</div><div class="tap-hint">Click to open risks</div>`,
+            body: `<ul class="plain-list">${timeline.drivesToSixMonths.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`,
+          })}
+        </div>
+
+        <div class="section-head pace-exec-head">
+          <div>
+            <div class="eyebrow">For the executive team</div>
+            <h2>${escapeHtml(paceCompare.headline)}</h2>
+            <p class="lede">A pause on unguarded AI is not a pause on progress. It is how you get a quicker sprint than competitors who launch noise.</p>
+          </div>
+        </div>
+
+        <div class="split">
+          <article class="outcome bad">
+            <h3><span class="dot bad"></span> ${escapeHtml(paceCompare.falseFast.title)}</h3>
+            <p class="feel">${escapeHtml(paceCompare.falseFast.feel)}</p>
+            <ul>${paceCompare.falseFast.outcome.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
+          </article>
+          <article class="outcome good">
+            <h3><span class="dot good"></span> ${escapeHtml(paceCompare.trueFast.title)}</h3>
+            <p class="feel">${escapeHtml(paceCompare.trueFast.feel)}</p>
+            <ul>${paceCompare.trueFast.outcome.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
+          </article>
+        </div>
+
+        <div class="callout pace-callout">${escapeHtml(paceCompare.executiveLine)}</div>
       </section>
 
       <section id="journey">
@@ -404,9 +487,9 @@ function render() {
 
         <div class="cta">
           <h2>Approve the journey before the quote</h2>
-          <p>This awareness site is intentionally non-commercial. It exists so leadership can see why a governed Pakistan pilot beats an unguarded robot — and why expansion is earned by evidence.</p>
+          <p>This awareness site is intentionally non-commercial. Lock the Human OS so a 3-month sprint becomes an asset — not a 6-month rebuild. Unguarded speed is the longer calendar.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#problem">Back to the problem</a>
+            <a class="btn btn-primary" href="#pace">See the 3 / 6 month path</a>
             <a class="btn btn-ghost" href="#scenarios">Revisit a use case</a>
           </div>
         </div>
