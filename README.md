@@ -6,7 +6,7 @@ Interactive client submission site for the **Registration-to-Call · Pakistan Pi
 
 **Live (GitHub Pages):** https://zsabri19.github.io/industrytc-scope-lock/
 
-> Private repository. Pages visitors need GitHub access to this repo (invite collaborators), or switch the repo to public for an open client link.
+**Repo:** https://github.com/zsabri19/industrytc-scope-lock (public)
 
 ## Source
 
