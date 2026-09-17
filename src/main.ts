@@ -532,20 +532,35 @@ function commercialSection() {
 
         <div class="guide commercial-guide" role="note">
           <strong>Illustrative</strong>
-          <span>Defaults follow prior Seed R&amp;D (~2,700 min/mo · ~90 sec filter talk · $0.35/min cost basis). Adjust freely in the fields below.</span>
+          <span>Leadership enters calls and average talk time. Billable minutes are calculated: <em>calls/day × working days × (talk seconds ÷ 60)</em>. Defaults match prior Seed R&amp;D (~90 sec filter · ~2,700 min/mo).</span>
         </div>
 
         <div class="commercial-layout">
           <form class="card commercial-inputs" id="commercial-form" autocomplete="off">
             <h3>Model inputs</h3>
-            <p class="field-note">All fields are editable. Leave “Client rate / min” blank to price calling from cost + margin.</p>
+            <p class="field-note">Start with call volume and duration — minutes are derived. Leave “Client rate / min” blank to price calling from cost + margin.</p>
 
+            <div class="input-block-label">Call volume → billable minutes</div>
             <div class="input-grid">
               <label class="field">
-                <span>Billable minutes / month</span>
-                <input type="number" min="0" step="50" name="minutesPerMonth" value="${c.minutesPerMonth}" />
-                <small>Unit: minutes</small>
+                <span>Connected calls / day</span>
+                <input type="number" min="0" step="1" name="callsPerDay" value="${c.callsPerDay}" />
+                <small>Answered / connected calls</small>
               </label>
+              <label class="field">
+                <span>Working days / month</span>
+                <input type="number" min="1" max="31" step="1" name="workingDaysPerMonth" value="${c.workingDaysPerMonth}" />
+                <small>Usually 22–26</small>
+              </label>
+              <label class="field">
+                <span>Avg talk duration (seconds)</span>
+                <input type="number" min="0" step="5" name="avgTalkSeconds" value="${c.avgTalkSeconds}" />
+                <small>Filter design band ~90 sec</small>
+              </label>
+            </div>
+
+            <div class="input-block-label">Pricing &amp; fees</div>
+            <div class="input-grid">
               <label class="field">
                 <span>Internal cost / min (USD)</span>
                 <input type="number" min="0" step="0.01" name="costPerMin" value="${c.costPerMin}" />
@@ -602,9 +617,39 @@ function commercialSection() {
 
 function commercialResultsHtml() {
   const b = computeCommercial(commercial, timeline.durationMonths)
+  const v = b.volume
   return `
             <div class="card commercial-results">
-              <h3>Phase 1 segments</h3>
+              <h3>Volume bridge</h3>
+              <div class="volume-bridge">
+                <div class="vb-step">
+                  <span>Calls / day</span>
+                  <strong>${fmtNum(commercial.callsPerDay, 0)}</strong>
+                </div>
+                <div class="vb-op">×</div>
+                <div class="vb-step">
+                  <span>Days / month</span>
+                  <strong>${fmtNum(commercial.workingDaysPerMonth, 0)}</strong>
+                </div>
+                <div class="vb-op">=</div>
+                <div class="vb-step">
+                  <span>Calls / month</span>
+                  <strong>${fmtNum(v.callsPerMonth, 0)}</strong>
+                </div>
+                <div class="vb-op">×</div>
+                <div class="vb-step">
+                  <span>Avg talk</span>
+                  <strong>${fmtNum(commercial.avgTalkSeconds, 0)}s <em>(${fmtNum(v.avgTalkMinutes, 2)} min)</em></strong>
+                </div>
+                <div class="vb-op">=</div>
+                <div class="vb-step highlight">
+                  <span>Billable minutes / month</span>
+                  <strong>${fmtNum(v.billableMinutes, 0)}</strong>
+                </div>
+              </div>
+              <p class="volume-formula">Formula: <code>calls/day × working days × (avg talk seconds ÷ 60) = billable minutes</code></p>
+
+              <h3 class="segments-title">Phase 1 segments</h3>
               <div class="comm-table-wrap">
                 <table class="comm-table">
                   <thead>
@@ -624,7 +669,7 @@ function commercialResultsHtml() {
                           <strong>${escapeHtml(line.label)}</strong>
                           ${line.note ? `<div class="line-note">${escapeHtml(line.note)}</div>` : ""}
                         </td>
-                        <td>${fmtNum(line.units, line.id === "advisory" ? 1 : 0)} <span class="unit">${escapeHtml(line.unitsLabel)}</span></td>
+                        <td>${fmtNum(line.units, line.id === "calling" ? 0 : line.id === "advisory" ? 1 : 0)} <span class="unit">${escapeHtml(line.unitsLabel)}</span></td>
                         <td>${fmtMoney(line.rate)} <span class="unit">${escapeHtml(line.rateLabel)}</span></td>
                         <td class="amount">${fmtMoney(line.amount)}</td>
                       </tr>`,
@@ -743,7 +788,9 @@ function bindCommercial() {
     const fd = new FormData(form)
     const rateRaw = String(fd.get("clientRatePerMin") ?? "").trim()
     commercial = {
-      minutesPerMonth: parseNum(String(fd.get("minutesPerMonth")), commercial.minutesPerMonth),
+      callsPerDay: parseNum(String(fd.get("callsPerDay")), commercial.callsPerDay),
+      workingDaysPerMonth: parseNum(String(fd.get("workingDaysPerMonth")), commercial.workingDaysPerMonth),
+      avgTalkSeconds: parseNum(String(fd.get("avgTalkSeconds")), commercial.avgTalkSeconds),
       costPerMin: parseNum(String(fd.get("costPerMin")), commercial.costPerMin),
       callingMarginPct: parseNum(String(fd.get("callingMarginPct")), commercial.callingMarginPct),
       clientRatePerMin: rateRaw === "" ? null : parseNum(rateRaw, 0),

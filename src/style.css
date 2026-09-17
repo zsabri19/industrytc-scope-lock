@@ -1063,10 +1063,94 @@ details.expand:focus-within {
   margin: 0 0 0.35rem;
 }
 
+.segments-title {
+  margin-top: 1.15rem !important;
+}
+
 .field-note {
   margin: 0 0 1rem;
   font-size: 0.86rem;
   color: var(--muted);
+}
+
+.input-block-label {
+  margin: 0.35rem 0 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+}
+
+.volume-bridge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.vb-step {
+  flex: 1 1 110px;
+  min-width: 100px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.vb-step span {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.vb-step strong {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.vb-step strong em {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.vb-step.highlight {
+  background: var(--teal-soft);
+  border-color: var(--teal-mid);
+}
+
+.vb-step.highlight strong {
+  color: var(--teal-dark);
+  font-size: 1.1rem;
+}
+
+.vb-op {
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: var(--muted);
+  min-width: 1rem;
+}
+
+.volume-formula {
+  margin: 0 0 0.25rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.volume-formula code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  background: var(--cream);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
 }
 
 .input-grid {

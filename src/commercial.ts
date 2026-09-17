@@ -1,8 +1,12 @@
 /** Phase 1 illustrative commercial model — editable calculator defaults from prior R&D. */
 
 export type CommercialState = {
-  /** Estimated billable AI talk minutes per month */
-  minutesPerMonth: number
+  /** Connected / answered calls per day (leadership-friendly) */
+  callsPerDay: number
+  /** Working days counted in the month */
+  workingDaysPerMonth: number
+  /** Average talk duration per connected call, in seconds */
+  avgTalkSeconds: number
   /** Internal telephony/AI cost per minute (USD) */
   costPerMin: number
   /** Target gross margin on calling line (0–95), price = cost / (1 - margin/100) */
@@ -17,12 +21,18 @@ export type CommercialState = {
   setupFee: number
   /** Months to amortize setup into monthly view (1–12) */
   setupAmortMonths: number
-  /** Overage rate if minutes exceed plan (display only for now) */
+  /** Overage rate if minutes exceed plan */
   overagePerMin: number
 }
 
+/**
+ * Seed R&D equivalent: ~2,700 billable min/mo at ~90 sec talk
+ * → 2,700 / 1.5 = 1,800 calls/mo → ~69 calls/day × 26 working days
+ */
 export const commercialDefaults: CommercialState = {
-  minutesPerMonth: 2700,
+  callsPerDay: 69,
+  workingDaysPerMonth: 26,
+  avgTalkSeconds: 90,
   costPerMin: 0.35,
   callingMarginPct: 50,
   clientRatePerMin: null,
@@ -31,6 +41,19 @@ export const commercialDefaults: CommercialState = {
   setupFee: 1500,
   setupAmortMonths: 6,
   overagePerMin: 0.6,
+}
+
+export type VolumeDerived = {
+  callsPerMonth: number
+  avgTalkMinutes: number
+  billableMinutes: number
+}
+
+export function deriveVolume(state: CommercialState): VolumeDerived {
+  const callsPerMonth = Math.max(0, state.callsPerDay) * Math.max(0, state.workingDaysPerMonth)
+  const avgTalkMinutes = Math.max(0, state.avgTalkSeconds) / 60
+  const billableMinutes = callsPerMonth * avgTalkMinutes
+  return { callsPerMonth, avgTalkMinutes, billableMinutes }
 }
 
 export type CommercialLine = {
@@ -45,6 +68,7 @@ export type CommercialLine = {
 }
 
 export type CommercialBreakdown = {
+  volume: VolumeDerived
   effectiveClientRate: number
   callingCost: number
   callingPrice: number
@@ -74,8 +98,9 @@ export function computeCommercial(
   state: CommercialState,
   phaseMonths = 3,
 ): CommercialBreakdown {
+  const volume = deriveVolume(state)
   const rate = effectiveClientRate(state)
-  const minutes = Math.max(0, state.minutesPerMonth)
+  const minutes = volume.billableMinutes
   const callingCost = minutes * state.costPerMin
   const callingPrice = minutes * rate
   const callingMarginPctActual =
@@ -90,7 +115,6 @@ export function computeCommercial(
 
   const phaseCalling = callingPrice * phaseMonths
   const phaseAdvisory = advisoryAmount * phaseMonths
-  // Setup is one-time in the phase (not × months)
   const phaseSetup = Math.max(0, state.setupFee)
   const phaseTotal = phaseCalling + phaseAdvisory + phaseSetup
 
@@ -103,7 +127,7 @@ export function computeCommercial(
       rateLabel: "USD / min",
       rate,
       amount: callingPrice,
-      note: `Internal cost basis ${fmtMoney(state.costPerMin)}/min · margin ~${callingMarginPctActual.toFixed(0)}%`,
+      note: `${fmtNum(volume.callsPerMonth, 0)} calls × ${fmtNum(volume.avgTalkMinutes, 2)} min avg · cost ${fmtMoney(state.costPerMin)}/min · margin ~${callingMarginPctActual.toFixed(0)}%`,
     },
     {
       id: "advisory",
@@ -131,6 +155,7 @@ export function computeCommercial(
   ]
 
   return {
+    volume,
     effectiveClientRate: rate,
     callingCost,
     callingPrice,
