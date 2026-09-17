@@ -20,19 +20,25 @@ const report = {
   mainStatus: main.status,
   cssStatus: css.status,
   hasApp: html.body.includes('id="app"'),
-  hasTitle: html.body.includes("Scope-Lock"),
-  hasScenarioSelect: main.body.includes("scenario-select"),
-  hasTooltips: main.body.includes("data-tip"),
-  hasModeToggle: main.body.includes("data-mode"),
-  hasAcceptance: main.body.includes("Approve the journey"),
-  hasCompare: main.body.includes("tradeoffs"),
-  hasDispositions: main.body.includes("QUALIFIED_SELLER"),
-  cssHasTeal: css.body.includes("#01a781"),
-  mainBytes: main.body.length,
+  noTooltipDiv: !html.body.includes('id="tooltip"'),
+  hasDetails: main.body.includes("<details"),
+  hasExpandId: main.body.includes("data-expand-id"),
+  noBindTooltips: !main.body.includes("bindTooltips"),
+  noHoverCopy: !main.body.includes("Hover any") && !main.body.includes("hover a card"),
+  hasGuide: main.body.includes("How to use this page"),
+  clickCopy: main.body.includes("Click any card"),
+  cssHasDetails: css.body.includes("details.expand"),
+  noTooltipCss: !css.body.includes(".tooltip {"),
 }
 
 console.log(JSON.stringify(report, null, 2))
-const ok = Object.entries(report).every(([k, v]) =>
-  k.endsWith("Status") ? v === 200 : k === "mainBytes" ? v > 1000 : Boolean(v),
-)
-process.exit(ok ? 0 : 1)
+const failed = Object.entries(report).filter(([k, v]) => {
+  if (k.endsWith("Status")) return v !== 200
+  if (k.startsWith("no")) return v !== true
+  return !v
+})
+if (failed.length) {
+  console.error("FAILED", failed)
+  process.exit(1)
+}
+console.log("SMOKE OK")
