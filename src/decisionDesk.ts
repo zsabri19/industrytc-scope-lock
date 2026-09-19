@@ -15,6 +15,7 @@ export type DeskState = {
   overall: Overall
   reviewerName: string
   reviewerRole: string
+  reviewerEmail: string
   generalComment: string
   include: Record<string, IncludeVote>
   outOfScope: Record<string, OutVote>
@@ -23,7 +24,12 @@ export type DeskState = {
   comments: Record<string, string>
   owners: Record<string, string>
   updatedAt: string | null
+  submittedAt: string | null
 }
+
+/** Inbox for Decision Desk submissions */
+export const SUBMIT_TO = "zeeshan@global-mkts.com"
+export const SUBMIT_CC = "ali@global-mkts.com"
 
 export const includeItems: DeskItem[] = [
   {
@@ -188,6 +194,7 @@ export function defaultDeskState(): DeskState {
     overall: "unset",
     reviewerName: "",
     reviewerRole: "",
+    reviewerEmail: "",
     generalComment: "",
     include: emptyMap(includeItems, "unset"),
     outOfScope: emptyMap(outItems, "unset"),
@@ -196,6 +203,7 @@ export function defaultDeskState(): DeskState {
     comments: {},
     owners: Object.fromEntries(ownerFields.map((o) => [o.id, ""])),
     updatedAt: null,
+    submittedAt: null,
   }
 }
 
@@ -267,7 +275,9 @@ export function buildSummaryText(state: DeskState): string {
     "Industry TC — Scope Lock CEO Decision Summary",
     `Generated: ${new Date().toLocaleString()}`,
     `Reviewer: ${state.reviewerName || "—"} (${state.reviewerRole || "—"})`,
+    `Email: ${state.reviewerEmail || "—"}`,
     `Overall: ${labelOverall(state.overall)}`,
+    `Submitted: ${state.submittedAt || "not yet"}`,
     "",
     "IN PHASE 1",
     ...includeItems.map((i) => `- [${state.include[i.id]}] ${i.label}${note(state, i.id)}`),

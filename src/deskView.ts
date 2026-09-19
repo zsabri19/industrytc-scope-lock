@@ -10,6 +10,8 @@ import {
   saveDeskState,
   safetyItems,
   stopItems,
+  SUBMIT_CC,
+  SUBMIT_TO,
   type DeskState,
   type IncludeVote,
   type OutVote,
@@ -67,7 +69,7 @@ export function renderDeskPage(root: HTMLElement, baseUrl: string) {
         <h1>Phase 1 decision desk</h1>
         <p class="lede">
           Simple choices only: keep or remove scope, agree or discuss safety rules, name owners, and leave comments.
-          Your selections update the summary on the right in real time. Nothing is submitted to a server — you can copy or download the summary to share.
+          When you are ready, submit — we receive it directly and come back with locked commercials within 24 hours.
         </p>
         <div class="desk-progress card">
           <div><span>Open items</span><strong class="${openTotal ? "warn-text" : "ok-text"}">${openTotal}</strong></div>
@@ -97,6 +99,9 @@ export function renderDeskPage(root: HTMLElement, baseUrl: string) {
                 <input type="text" data-field="reviewerRole" value="${escapeHtml(state.reviewerRole)}" placeholder="e.g. CEO" />
               </label>
             </div>
+            <label class="desk-comment-label">Your email (for follow-up)
+              <input type="email" data-field="reviewerEmail" value="${escapeHtml(state.reviewerEmail)}" placeholder="e.g. tanseer@industrytc.com" />
+            </label>
             <label class="desk-comment-label">General comment
               <textarea data-field="generalComment" rows="3" placeholder="Optional note for the team…">${escapeHtml(state.generalComment)}</textarea>
             </label>
@@ -145,7 +150,7 @@ export function renderDeskPage(root: HTMLElement, baseUrl: string) {
         <aside class="desk-side" id="ceo-summary">
           <div class="card desk-summary sticky-summary">
             <h2>Live summary</h2>
-            <p class="desk-help">Updates as you click. Copy or download when ready to share.</p>
+            <p class="desk-help">Updates as you click. Submit when ready — we receive it by email.</p>
             <div class="summary-overall">${escapeHtml(overallLabel(state.overall))}</div>
             <ul class="summary-list">
               <li><strong>${s.includeYes}</strong> items kept in Phase 1</li>
@@ -156,21 +161,56 @@ export function renderDeskPage(root: HTMLElement, baseUrl: string) {
               <li><strong>${openTotal}</strong> still open</li>
             </ul>
             <div class="summary-actions">
-              <button type="button" class="btn btn-primary" data-desk-action="copy">Copy summary</button>
-              <button type="button" class="btn btn-reset" data-desk-action="download">Download .txt</button>
+              <button type="button" class="btn btn-primary" data-desk-action="submit" ${state.submittedAt ? "disabled" : ""}>
+                ${state.submittedAt ? "Submitted" : "Submit decision"}
+              </button>
+              <button type="button" class="btn btn-reset" data-desk-action="copy">Copy summary</button>
               <button type="button" class="btn btn-reset" data-desk-action="reset">Clear answers</button>
             </div>
             <p class="summary-note" id="desk-toast" hidden></p>
-            ${state.updatedAt ? `<p class="summary-saved">Saved on this device · ${escapeHtml(new Date(state.updatedAt).toLocaleString())}</p>` : `<p class="summary-saved">Answers save automatically on this device</p>`}
+            ${
+              state.submittedAt
+                ? `<p class="summary-saved ok-text">Submitted · ${escapeHtml(new Date(state.submittedAt).toLocaleString())}</p>`
+                : state.updatedAt
+                  ? `<p class="summary-saved">Saved on this device · ${escapeHtml(new Date(state.updatedAt).toLocaleString())}</p>`
+                  : `<p class="summary-saved">Answers save automatically on this device</p>`
+            }
           </div>
         </aside>
       </div>
     </main>
 
-    <footer class="foot">Industry TC Decision Desk · Scope Lock Phase 1 · Saved locally in your browser</footer>
+    <footer class="foot">Industry TC Decision Desk · Scope Lock Phase 1 · Submit notifies GMT</footer>
+
+    ${state.submittedAt ? thankYouOverlay(baseUrl) : ""}
   `
 
   bindDesk(root)
+}
+
+function thankYouOverlay(baseUrl: string) {
+  return `
+    <div class="thankyou-overlay" role="dialog" aria-modal="true" aria-labelledby="thankyou-title">
+      <div class="card thankyou-card">
+        <img class="brand-logo thankyou-logo" src="${baseUrl}industry-tc-logo.png" alt="Industry TC" width="168" height="37" />
+        <div class="eyebrow">Received</div>
+        <h2 id="thankyou-title">Thank you, ${escapeHtml(state.reviewerName || "Tanseer")}.</h2>
+        <p class="thankyou-body">
+          Your Scope Lock decisions are with us. That kind of clarity is rare — and it is exactly what keeps a warm lead from getting burned by a fast, unguarded call.
+        </p>
+        <blockquote class="thankyou-quote">
+          “Mark the journey first. We will lock the commercials within 24 hours and come back clean — no noise, just the next clear step. Stay tuned.”
+          <cite>— Zeeshan Sabri</cite>
+        </blockquote>
+        <p class="thankyou-next">
+          You will hear from Global Markets within <strong>24 hours</strong> with the commercial lock aligned to what you approved here.
+        </p>
+        <div class="thankyou-actions">
+          <a class="btn btn-primary" href="#problem">Back to the brief</a>
+          <button type="button" class="btn btn-reset" data-desk-action="close-thankyou">Keep editing on this device</button>
+        </div>
+      </div>
+    </div>`
 }
 
 function overallBtn(value: Overall, label: string, current: Overall) {
@@ -313,7 +353,11 @@ function bindDesk(root: HTMLElement) {
 
   root.querySelectorAll<HTMLInputElement>("[data-field]").forEach((input) => {
     input.addEventListener("input", () => {
-      const key = input.dataset.field as "reviewerName" | "reviewerRole" | "generalComment"
+      const key = input.dataset.field as
+        | "reviewerName"
+        | "reviewerRole"
+        | "reviewerEmail"
+        | "generalComment"
       state[key] = input.value
       persist()
       if (key === "generalComment") {
@@ -334,26 +378,18 @@ function bindDesk(root: HTMLElement) {
     })
   })
 
+  root.querySelector<HTMLButtonElement>('[data-desk-action="submit"]')?.addEventListener("click", () => {
+    void submitDecision(root)
+  })
+
   root.querySelector<HTMLButtonElement>('[data-desk-action="copy"]')?.addEventListener("click", async () => {
     const text = buildSummaryText(state)
     try {
       await navigator.clipboard.writeText(text)
-      toast(root, "Summary copied — paste into email or WhatsApp.")
+      toast(root, "Summary copied.")
     } catch {
-      toast(root, "Copy failed — use Download instead.")
+      toast(root, "Copy failed — try again.")
     }
-  })
-
-  root.querySelector<HTMLButtonElement>('[data-desk-action="download"]')?.addEventListener("click", () => {
-    const text = buildSummaryText(state)
-    const blob = new Blob([text], { type: "text/plain;charset=utf-8" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `IndustryTC-ScopeLock-Decision-${new Date().toISOString().slice(0, 10)}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
-    toast(root, "Download started.")
   })
 
   root.querySelector<HTMLButtonElement>('[data-desk-action="reset"]')?.addEventListener("click", () => {
@@ -361,6 +397,10 @@ function bindDesk(root: HTMLElement) {
     clearDeskState()
     state = defaultDeskState()
     refreshSummary(root)
+  })
+
+  root.querySelector<HTMLButtonElement>('[data-desk-action="close-thankyou"]')?.addEventListener("click", () => {
+    root.querySelector(".thankyou-overlay")?.remove()
   })
 
   const menuBtn = root.querySelector<HTMLButtonElement>('[data-desk-action="menu"]')
@@ -382,4 +422,62 @@ function bindDesk(root: HTMLElement) {
       menuBtn?.setAttribute("aria-expanded", "false")
     })
   })
+}
+
+async function submitDecision(root: HTMLElement) {
+  if (state.overall === "unset") {
+    toast(root, "Please select an overall decision first.")
+    document.querySelector("#ceo-overall")?.scrollIntoView({ behavior: "smooth", block: "start" })
+    return
+  }
+  if (!state.reviewerName.trim()) {
+    toast(root, "Please add your name before submitting.")
+    document.querySelector("#ceo-overall")?.scrollIntoView({ behavior: "smooth", block: "start" })
+    return
+  }
+
+  const btn = root.querySelector<HTMLButtonElement>('[data-desk-action="submit"]')
+  if (btn) {
+    btn.disabled = true
+    btn.textContent = "Submitting…"
+  }
+  toast(root, "Sending your decision…")
+
+  const summary = buildSummaryText(state)
+  const payload = {
+    name: state.reviewerName.trim(),
+    email: state.reviewerEmail.trim() || "noreply@industrytc.com",
+    _subject: `Industry TC Scope Lock Decision — ${overallLabel(state.overall)}`,
+    _cc: SUBMIT_CC,
+    _template: "table",
+    _captcha: "false",
+    reviewer_role: state.reviewerRole || "—",
+    overall_decision: overallLabel(state.overall),
+    reply_to: state.reviewerEmail.trim() || "—",
+    message: summary,
+  }
+
+  try {
+    const res = await fetch(`https://formsubmit.co/ajax/${SUBMIT_TO}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) {
+      throw new Error(`Submit failed (${res.status})`)
+    }
+    state.submittedAt = new Date().toISOString()
+    persist()
+    refreshSummary(root)
+  } catch (err) {
+    console.error(err)
+    if (btn) {
+      btn.disabled = false
+      btn.textContent = "Submit decision"
+    }
+    toast(root, "Submit failed. Please copy the summary and email us, or try again.")
+  }
 }
