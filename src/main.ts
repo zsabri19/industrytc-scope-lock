@@ -23,8 +23,10 @@ import {
   timeline,
   type JourneyStep,
 } from "./data"
+import { renderDeskPage } from "./deskView"
 
 type Mode = "today" | "guarded"
+type View = "brief" | "desk"
 
 let mode: Mode = "guarded"
 let scenarioId = scenarios[0].id
@@ -32,6 +34,11 @@ const openIds = new Set<string>()
 let commercial: CommercialState = { ...commercialDefaults }
 
 const app = document.querySelector<HTMLDivElement>("#app")!
+
+function currentView(): View {
+  const h = location.hash.replace(/^#/, "")
+  return h === "ceo" || h === "decision-desk" || h.startsWith("ceo-") ? "desk" : "brief"
+}
 
 function isOpen(id: string) {
   return openIds.has(id)
@@ -63,6 +70,11 @@ function detailsCard(opts: {
 }
 
 function render() {
+  if (currentView() === "desk") {
+    renderDeskPage(app, import.meta.env.BASE_URL)
+    return
+  }
+
   const scenario = scenarios.find((s) => s.id === scenarioId) ?? scenarios[0]
 
   app.innerHTML = `
@@ -83,9 +95,10 @@ function render() {
         <a href="#risks">Risks</a>
         <a href="#commercial">Commercial</a>
         <a href="#decide">Decide</a>
+        <a href="#ceo" class="nav-cta">CEO Desk</a>
       </nav>
       <div class="nav-end">
-        <span class="badge-nc">Illustrative commercials</span>
+        <a class="badge-nc badge-link" href="#ceo">CEO decision desk</a>
         <button class="menu-btn" type="button" data-action="menu" aria-expanded="false">Menu</button>
       </div>
     </header>
@@ -102,6 +115,7 @@ function render() {
       <a href="#risks">Risks</a>
       <a href="#commercial">Commercial</a>
       <a href="#decide">Decide</a>
+      <a href="#ceo">CEO Decision Desk</a>
     </div>
 
     <main class="wrap">
@@ -499,11 +513,11 @@ function render() {
         </ul>
 
         <div class="cta">
-          <h2>Approve the journey — then lock the numbers</h2>
-          <p>Agree the three-month Scope Lock path. Use the commercial calculator as a working model; finalize price after volume and duration evidence is confirmed.</p>
+          <h2>Ready to decide?</h2>
+          <p>Open the CEO Decision Desk to keep or remove scope items, agree safety rules, name owners, and leave comments. Your summary updates live and can be copied or downloaded.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#commercial">Review Phase 1 commercials</a>
-            <a class="btn btn-ghost" href="#pace">See the 3-month timeline</a>
+            <a class="btn btn-primary" href="#ceo">Open CEO Decision Desk</a>
+            <a class="btn btn-ghost" href="#commercial">Review commercials</a>
           </div>
         </div>
       </section>
@@ -840,4 +854,15 @@ function observeActiveNav() {
   sections.forEach((s) => io.observe(s))
 }
 
-render()
+function route() {
+  render()
+  const hash = location.hash
+  if (!hash || hash === "#") return
+  window.requestAnimationFrame(() => {
+    const el = document.querySelector(hash)
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" })
+  })
+}
+
+window.addEventListener("hashchange", route)
+route()

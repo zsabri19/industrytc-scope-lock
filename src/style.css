@@ -1339,6 +1339,275 @@ details.expand:focus-within {
   color: var(--ink);
 }
 
+/* —— CEO Decision Desk —— */
+.nav-cta {
+  background: var(--ink) !important;
+  color: #eaf6f1 !important;
+  margin-left: 0.25rem;
+}
+
+.nav-cta:hover,
+.nav-cta.active {
+  background: var(--teal-dark) !important;
+  color: white !important;
+}
+
+.badge-link {
+  text-decoration: none;
+}
+
+.badge-link:hover {
+  filter: brightness(0.97);
+}
+
+.btn-ghost-dark {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.desk-wrap {
+  padding-bottom: 3rem;
+}
+
+.desk-hero {
+  padding-top: 1.5rem;
+}
+
+.desk-progress {
+  margin-top: 1.1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  padding: 0.9rem 1rem;
+}
+
+.desk-progress > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.desk-progress span {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.desk-progress strong {
+  font-size: 1.15rem;
+}
+
+.warn-text {
+  color: var(--warn);
+}
+.ok-text {
+  color: var(--ok);
+}
+
+.desk-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.75fr);
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.desk-main {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.desk-block {
+  padding: 1.15rem 1.2rem 1.25rem;
+}
+
+.desk-block h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.desk-help {
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.desk-row {
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.desk-row:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.desk-row h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.desk-row p {
+  margin: 0 0 0.7rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+}
+
+.choice-row.compact {
+  margin-bottom: 0.55rem;
+}
+
+.choice-btn {
+  border: 1px solid var(--line);
+  background: var(--cream);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 0.5rem 0.85rem;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.choice-btn:hover {
+  border-color: var(--teal);
+}
+
+.choice-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white;
+}
+
+.choice-btn.active.ok {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+.choice-btn.active.bad {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+.choice-btn.active.warn {
+  background: var(--warn);
+  border-color: var(--warn);
+}
+
+.mini-comment,
+.desk-comment-label,
+.desk-fields label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.mini-comment input,
+.desk-comment-label textarea,
+.desk-fields input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+  background: var(--cream);
+}
+
+.desk-fields {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.desk-fields.twin {
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 0.75rem;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: calc(var(--nav-h) + 12px);
+  padding: 1.1rem 1.15rem;
+}
+
+.summary-overall {
+  background: var(--teal-soft);
+  border: 1px solid var(--teal-mid);
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.summary-list {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.summary-list li + li {
+  margin-top: 0.3rem;
+}
+
+.summary-actions {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.summary-actions .btn,
+.summary-actions .btn-reset {
+  justify-content: center;
+  text-align: center;
+}
+
+.summary-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.summary-saved {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .desk-layout,
+  .desk-fields.twin,
+  .desk-progress {
+    grid-template-columns: 1fr;
+  }
+  .sticky-summary {
+    position: static;
+  }
+}
+
 /* —— Layers —— */
 .layers {
   display: grid;
