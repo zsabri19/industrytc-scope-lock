@@ -91,7 +91,7 @@ export function renderDeskPage(root: HTMLElement, baseUrl: string) {
             </div>
             <div class="desk-fields twin">
               <label>Your name
-                <input type="text" data-field="reviewerName" value="${escapeHtml(state.reviewerName)}" placeholder="e.g. Tansir" />
+                <input type="text" data-field="reviewerName" value="${escapeHtml(state.reviewerName)}" placeholder="e.g. Tanseer" />
               </label>
               <label>Your role
                 <input type="text" data-field="reviewerRole" value="${escapeHtml(state.reviewerRole)}" placeholder="e.g. CEO" />

@@ -3,7 +3,7 @@
 export const meta = {
   title: "Scope-Lock Awareness",
   subtitle: "Registration-to-Call Orchestration · Pakistan Pilot",
-  commercial: "No commercials in this submission. Pricing follows scope approval and evidence confirmation.",
+  commercial: "Commercial figures on this site are illustrative. Final pricing follows scope approval and evidence confirmation.",
   decision:
     "Approve the scope, sequencing, guardrails, responsibilities, and evidence gates before any commercial proposal is issued.",
   problem: "Registration is happening, but the call is not happening quickly enough.",
@@ -382,7 +382,7 @@ export const comparisons: CompareItem[] = [
     pro: "Prices verified operating scope — not meeting anecdotes.",
     con: "Delays a quote until baselines are visible.",
     hoverIfDo: "Assumptions are labeled; margins survive contact with reality.",
-    hoverIfDont: "Retainer built on ~500/day and 90-sec talk that were never measured.",
+    hoverIfDont: "Retainer built on unverified daily volume and talk-time assumptions that were never measured.",
   },
 ]
 
